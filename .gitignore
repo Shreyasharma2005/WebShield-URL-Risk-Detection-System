@@ -1,0 +1,11 @@
+
+
+venv/
+__pycache__/
+*.pyc
+models/model.pkl
+.DS_Store
+data/raw/
+.env
+*.env
+phishing_history.csv

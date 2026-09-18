@@ -2,6 +2,12 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import joblib
 from utils import extract_features
+from risk_engine import (
+    calculate_url_risk,
+    calculate_domain_risk,
+    calculate_page_risk,
+    calculate_final_risk
+)
 import os
 import csv
 from datetime import datetime
@@ -94,42 +100,47 @@ def is_trusted_domain(url):
 def analyze():
 
     data = request.get_json()
+
     url = data.get("url", "")
+
+    page_analysis = data.get(
+        "page_analysis",
+        {}
+    )
 
     features = extract_features(url)
 
     prediction = model.predict([features])[0]
     probability = model.predict_proba([features])[0][1]
 
-    risk_score = round(probability * 100)
+    url_risk, url_reasons = calculate_url_risk(url)
 
-    url_lower = url.lower()
+    domain = get_domain(url)
 
+    domain_risk, is_unknown_domain, domain_reasons = (
+     calculate_domain_risk(
+            domain,
+            known_domains
+        )
+    )
+
+    page_risk, page_reasons = calculate_page_risk(
+        page_analysis
+    )
+
+    risk_score, risk_breakdown = calculate_final_risk(
+        probability,
+        url_risk,
+        domain_risk,
+        page_risk
+    )
+
+# Trusted domains receive a strong safety adjustment
     if is_trusted_domain(url):
-        risk_score = 5
-        prediction = 0
+     risk_score = min(risk_score, 5)
 
-    else:
-    # Increase score for suspicious patterns
-        if any(word in url_lower for word in ["login", "verify", "secure", "account", "bank", "update", "password"]):
-            risk_score += 15
-
-        if "-" in get_domain(url):
-            risk_score += 10
-
-        if len(url) > 75:
-            risk_score += 10
-
-        if get_domain(url).count(".") > 2:
-            risk_score += 10
-
-    # Keep score between 0 and 100
-        risk_score = min(risk_score, 100)
-
-        if risk_score >= 40:
-            prediction = 1
-        else:
-            prediction = 0
+# Final prediction
+    prediction = 1 if risk_score >= 60 else 0
 
     result = {
         "url": url,
@@ -137,8 +148,13 @@ def analyze():
         "risk_score": risk_score,
         "risk_level": get_risk_level(risk_score),
         "context": detect_context(url),
-        "zero_day": zero_day_check(url),
-        "reasons": explain(url)
+        "zero_day": is_unknown_domain,
+        "risk_breakdown": risk_breakdown,
+        "reasons": (
+            url_reasons
+            + domain_reasons
+            + page_reasons
+        )
     }
 
     LOG_FILE = "phishing_history.csv"

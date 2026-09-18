@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>WebShield</title>
+
+
+    <style>
+
+        body {
+
+            width: 340px;
+
+            font-family: Arial, sans-serif;
+
+            margin: 0;
+
+            padding: 20px;
+
+            background: #f5f7fa;
+        }
+
+
+        h2 {
+
+            margin-top: 0;
+        }
+
+
+        .url {
+
+            font-size: 13px;
+
+            word-break: break-all;
+
+            color: #555;
+
+            margin-bottom: 15px;
+        }
+
+
+        .risk {
+
+            font-size: 28px;
+
+            font-weight: bold;
+
+            margin: 15px 0 5px;
+        }
+
+
+        .safe {
+
+            color: green;
+        }
+
+
+        .suspicious {
+
+            color: orange;
+        }
+
+
+        .danger {
+
+            color: red;
+        }
+
+
+        .section {
+
+            background: white;
+
+            padding: 12px;
+
+            margin-top: 12px;
+
+            border-radius: 8px;
+        }
+
+
+        .score {
+
+            font-size: 16px;
+
+            font-weight: bold;
+        }
+
+
+        .breakdown-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            margin: 8px 0;
+
+            font-size: 14px;
+        }
+
+
+        .bar-container {
+
+            width: 100%;
+
+            height: 7px;
+
+            background: #e5e7eb;
+
+            border-radius: 5px;
+
+            margin-top: 4px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .bar {
+
+            height: 100%;
+
+            width: 0%;
+
+            border-radius: 5px;
+
+            background: #555;
+
+            transition: width 0.3s;
+        }
+
+
+        ul {
+
+            padding-left: 20px;
+        }
+
+
+        li {
+
+            margin-bottom: 6px;
+        }
+
+
+        .context {
+
+            font-weight: bold;
+        }
+
+
+        .page-detail {
+
+            margin: 6px 0;
+
+            font-size: 13px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <h2>🛡️ WebShield</h2>
+
+
+    <!-- ================================================= -->
+    <!-- CURRENT WEBSITE -->
+    <!-- ================================================= -->
+
+    <div class="section">
+
+        <strong>Current Website</strong>
+
+
+        <div
+            id="url"
+            class="url"
+        >
+            Loading...
+        </div>
+
+
+        <div
+            id="risk"
+            class="risk"
+        >
+            Analyzing...
+        </div>
+
+
+        <div
+            id="score"
+            class="score"
+        >
+            Risk Score: --
+        </div>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- RISK BREAKDOWN -->
+    <!-- ================================================= -->
+
+    <div class="section">
+
+        <strong>Risk Breakdown</strong>
+
+
+        <!-- ML -->
+
+        <div class="breakdown-row">
+
+            <span>
+                🤖 ML Detection
+            </span>
+
+            <span id="ml-score">
+                --
+            </span>
+
+        </div>
+
+
+        <div class="bar-container">
+
+            <div
+                id="ml-bar"
+                class="bar"
+            ></div>
+
+        </div>
+
+
+        <!-- URL -->
+
+        <div class="breakdown-row">
+
+            <span>
+                🔗 URL Analysis
+            </span>
+
+            <span id="url-score">
+                --
+            </span>
+
+        </div>
+
+
+        <div class="bar-container">
+
+            <div
+                id="url-bar"
+                class="bar"
+            ></div>
+
+        </div>
+
+
+        <!-- DOMAIN -->
+
+        <div class="breakdown-row">
+
+            <span>
+                🌐 Domain Risk
+            </span>
+
+            <span id="domain-score">
+                --
+            </span>
+
+        </div>
+
+
+        <div class="bar-container">
+
+            <div
+                id="domain-bar"
+                class="bar"
+            ></div>
+
+        </div>
+
+
+        <!-- PAGE -->
+
+        <div class="breakdown-row">
+
+            <span>
+                📄 Page Analysis
+            </span>
+
+            <span id="page-score">
+                --
+            </span>
+
+        </div>
+
+
+        <div class="bar-container">
+
+            <div
+                id="page-bar"
+                class="bar"
+            ></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- PAGE ANALYSIS DETAILS -->
+    <!-- ================================================= -->
+
+    <div class="section">
+
+        <strong>
+            Page Analysis Details
+        </strong>
+
+
+        <div id="page-details">
+
+            Waiting for webpage analysis...
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- DETECTION REASONS -->
+    <!-- ================================================= -->
+
+    <div class="section">
+
+        <strong>
+            Detection Reasons
+        </strong>
+
+
+        <ul id="reasons">
+
+            <li>
+                Analyzing website...
+            </li>
+
+        </ul>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- CONTEXT -->
+    <!-- ================================================= -->
+
+    <div class="section">
+
+        <strong>
+            Context
+        </strong>
+
+
+        <div
+            id="context"
+            class="context"
+        >
+            --
+        </div>
+
+    </div>
+
+
+    <script src="popup.js"></script>
+
+
+</body>
+
+</html>
